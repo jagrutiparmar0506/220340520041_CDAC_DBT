@@ -1,0 +1,113 @@
+use jagruti;
+
+create table DEPT(DEPTNO int(2),
+DNAME varchar(15),
+LOC varchar(10));
+
+insert into DEPT values(10,'ACCOUNTING','NEW YORK'),
+(20,'RESEARCH','DALLAS'),
+(30,'SALES','CHICAGO'),
+(40,'OPERATIONS','BOSTON');
+
+create table EMP(EMPNO int(4),
+ENAME varchar(10),
+JOB varchar(9),
+HIREDATE date,
+SAL float(7,2),
+COMM float(7,2),
+DEPTNO int(2));
+
+insert into EMP values(7839,'KING','MANAGER','1991-11-17',5000,NULL,10),
+(7698,'BLAKE','CLERK','1981-05-01',285, NULL,30),
+(7782,'LARK','MANAGER','1981-06-09',2450,NULL,10),
+(7566,'JONES','CLERK','1981-04-02',2975,NULL,20),
+(7654,'MARTIN','SALESMAN','1981-09-28',1250,1400,30),
+(7499,'ALLEN','SALESMAN','1981-02-20',1600,300,30);
+
+
+#3.Display all the employees where SAL between 2500 and 5000 (inclusive of both).
+select * from emp where sal between 2500 and 5000;
+
+#4.Display all the ENAMEs in descending order of ENAME.
+select ename from emp order by ename desc;
+
+#5.Display all the JOBs in lowercase.
+select lower(job) from emp;
+
+#6.Display the ENAMEs and the lengths of the ENAMEs.
+select ename,length(ename) from emp;
+
+#7.Display the DEPTNO and the count of employees who belong to that DEPTNO .
+select deptno,count(ename) "Total_Count" from emp group by deptno;
+
+#8.Display the DNAMEs and the ENAMEs who belong to that DNAME.
+select dname,ename from dept,emp where emp.deptno=dept.deptno;
+
+#9.Display the position at which the string ‘AR’ occurs in the ename.
+select ename,instr(ename,'AR') from emp;
+
+#10.Display the HRA for each employee given that HRA is 20% of SAL.
+select ename,sal,sal*0.20 "HRA" from emp;
+
+#1
+create table tempp(first_str varchar(20),sec_str varchar(20),c varchar(20));
+delimiter //
+create procedure PROC1(a varchar(20),b varchar(20))
+begin
+declare w int(4);
+set w=locate(a,b);
+if (a!=W) then
+insert into tempp values(a,b,'ABSENT');
+else 
+insert into tempp values(a,b,'PRESENT');
+select * from tempp;
+end if;
+end; //
+delimiter ;
+drop table tempp;
+drop procedure PROC1;
+call PROC1('CDAC','DAC');
+
+
+#2
+delimiter //
+create function FUNC1(a int,b int,c int)
+returns boolean
+deterministic
+begin
+if (a+b>c) and (a+c>b) and (b+c>a)then 
+return true;
+else return false;
+end if;
+end; //
+delimiter ;
+
+delimiter //
+create procedure PRO2(a int, b int, c int)
+begin
+if FUNC1(a,b,c) then
+    insert into tempp1 values(a,b,c,'valid Traingle');
+else 
+    insert into tempp1 values(a,b,c,'not valid Traingle');
+    end if;
+    end; //
+    select * from tempp1;
+delimiter ;
+
+drop function FUNC1;
+drop procedure PRO2;
+
+create table tempp1(a int,b int, c int, status varchar(20) );
+
+call PRO2(10,20,30);
+select * from tempp1;
+select FUNC1(10,20,10) "Traingle";
+select FUNC1(10,20,30) "Traingle";
+select FUNC1(20,30,30) "Traingle";
+
+
+
+
+
+
+
